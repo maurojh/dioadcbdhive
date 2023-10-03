@@ -1,3 +1,5 @@
+import 'package:dioadcbdhive/aleatorio_model.dart';
+import 'package:dioadcbdhive/aleatorio_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -61,6 +63,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Box armazenamento;
+  late AleatorioRepository aleatorioRepository;
+  AleatorioModel aleatorioModel = AleatorioModel.vazio();
+
   int _counter = 0;
 
   @override
@@ -71,17 +76,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void carregaDados() async {
+    aleatorioRepository = await AleatorioRepository.carrega();
+    aleatorioModel = aleatorioRepository.obterDados();
+    
     armazenamento = await Hive.openBox('box_numeros_aleatorios');
     _counter = armazenamento.get('contador') ?? 0;
   }
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
       armazenamento.put('contador', _counter);
     });
