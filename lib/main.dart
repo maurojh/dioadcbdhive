@@ -60,7 +60,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Box armazenamento;
   int _counter = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    carregaDados();
+  }
+
+  void carregaDados() async {
+    armazenamento = await Hive.openBox('box_numeros_aleatorios');
+    _counter = armazenamento.get('contador') ?? 0;
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -70,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      armazenamento.put('contador', _counter);
     });
   }
 
