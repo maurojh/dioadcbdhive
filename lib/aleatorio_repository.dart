@@ -26,8 +26,11 @@ class AleatorioRepository {
 
   AleatorioModel obterDados() {
     var aleatorio = _caixa.get('aleatorioModel');
-
-    return AleatorioModel(aleatorio['contador']);
+    if(aleatorio == null) {
+      return AleatorioModel(0);
+    } else {
+      return AleatorioModel(aleatorio['contador']);
+    }
   }
     
 }

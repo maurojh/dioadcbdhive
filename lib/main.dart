@@ -78,15 +78,17 @@ class _MyHomePageState extends State<MyHomePage> {
   void carregaDados() async {
     aleatorioRepository = await AleatorioRepository.carrega();
     aleatorioModel = aleatorioRepository.obterDados();
-    
-    armazenamento = await Hive.openBox('box_numeros_aleatorios');
-    _counter = armazenamento.get('contador') ?? 0;
+
+    setState(() {
+      _counter = aleatorioModel.contador;
+    });
+    aleatorioRepository.salvar(aleatorioModel);
   }
 
   void _incrementCounter() {
     setState(() {
       _counter++;
-      armazenamento.put('contador', _counter);
+      aleatorioModel.contador = _counter;
     });
   }
 
